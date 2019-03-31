@@ -1,66 +1,107 @@
 package sk.itsovy.projectKaufland.bill;
 
-import sk.itsovy.projectKaufland.items.drinks.DraftInterface;
+import sk.itsovy.projectKaufland.database.Database;
+import sk.itsovy.projectKaufland.main.Globals;
+import sk.itsovy.projectKaufland.exception.BillException;
+import sk.itsovy.projectKaufland.items.drink.DraftInterface;
 import sk.itsovy.projectKaufland.items.Item;
-import sk.itsovy.projectKaufland.items.Piece;
-import sk.itsovy.projectKaufland.goods.Globals.MAXITEMS;
+import sk.itsovy.projectKaufland.items.PiecesInterface;
+import sk.itsovy.projectKaufland.items.food.Fruit;
+import sk.itsovy.projectKaufland.main.Internet;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Bill {
     private List<Item> items;
+    private int count;
+    private boolean open;
+    private Date datetime = new Date();
+
 
     public Bill() {
         items = new ArrayList<>();
+        open = true;
+        count = 0;
     }
 
-    public void addItem(Item item) {
-        items.add(item);
+    public Date getDatetime() {
+        return datetime;
     }
 
-    public double countPrice() {
-        double totalPrice = 0;
-        for (Item item : items) {
-            if (item instanceof DraftInterface) {
-                double vol = ((DraftInterface) item).getVolume() / 1000;
-                totalPrice += vol * item.getPrice();
-            } else if (item instanceof Piece) {
-                int amount = ((Piece) item).getAmount();
-                totalPrice += item.getPrice() * amount;
-            } else {
-                totalPrice += item.getPrice();
-            }
+    public void end() throws SQLException {
+        if (open) {
+//            System.out.println(datum + " " + time);
+            System.out.println("dt: " + datetime);
+            Database database = Database.getInstance();
+            database.insertNewBill(this);
         }
-        return totalPrice;
+        open = false;
     }
+
+    public void addItem(Item item) throws BillException {
+        if (item != null) {
+            if (open == false) {
+                String message = "Bill is closed. Is not allowed to add any items!";
+                throw new BillException(message);
+            }
+            if (count == Globals.MAXITEMS) {
+                String message = "Bill is full, maximum is " + Globals.MAXITEMS + " items";
+                throw new BillException(message);
+            }
+            items.add(item);
+            count++;
+        }
+    }
+
 
     public void removeItem(Item item) {
-        items.remove(item);
+        if (items.contains(item)) {
+            items.remove(item);
+            count--;
+        }
     }
 
-    public void printBill() {
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public double getFinalPrice() {
+        double finalPrice = 0;
         for (Item item : items) {
-            if (item instanceof DraftInterface) {
-                System.out.println("name: " + item.getName() + ", price: " + item.getPrice() + ",  volume: " + ((DraftInterface) item).getVolume());
-            } else if (item instanceof Piece) {
-                System.out.println("name: " + item.getName() + ", price: " + item.getPrice() + ",  amount: " + ((Piece) item).getAmount());
-            } else {
-                System.out.println("name: " + item.getName() + ", price: " + item.getPrice());
+            finalPrice += item.getTotalPrice();
+        }
+        return finalPrice;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public double getFinalPriceInUSD() throws IOException {
+        return Internet.getUSDRate() * getFinalPrice();
+    }
+
+    public void print() {
+        if (count == 0)
+            System.out.println("Nothing to print. Bill is empty !");
+        else {
+            for (Item item : items) {
+                if (item instanceof DraftInterface) {
+                    System.out.print(item.getName() + " " + ((DraftInterface) item).getVolume() + " ");
+                    System.out.println(item.getPrice() + " " + item.getTotalPrice());
+                } else if (item instanceof Fruit) {
+                    System.out.print(item.getName() + " " + ((Fruit) item).getWeight() + " ");
+                    System.out.println(item.getPrice() + " " + item.getTotalPrice());
+                } else if (item instanceof PiecesInterface) {
+                    System.out.print(item.getName() + " " + ((PiecesInterface) item).getAmount() + " ");
+                    System.out.println(item.getPrice() + " " + item.getTotalPrice());
+                }
+
             }
         }
     }
-//    public void addItem(){
-//        if(count>7) //7 globalna premenna
-//
-//    }
-//    public getCount(double count){
-//
-//    }
-//    public void printItems(){
-//        if (count=0);
-//    }
-    // sucet vsetkych poloziek
-    // end premenna typu boolean - ked je uzavreta tak open false , tak ked pridam polozku tak vyhodi exetions
-    // metoda and - blocek bude uzatvoreny, ked sa niekto pokusi pridat zavola sa vznimka ,a ked neni yiadna poloyka tak vzpise ye je praydna
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bill>
+    <date>
+        <dateOfPurchase>Mon Apr 01 00:17:04 CEST 2019</dateOfPurchase>
+    </date>
+    <items>
+        <item>
+            <name>Mineralka</name>
+            <price>1.2</price>
+            <amount>3</amount>
+        </item>
+        <item>
+            <name>Gazdovska</name>
+            <price>0.3</price>
+            <amount>2</amount>
+        </item>
+        <item>
+            <name>Cola</name>
+            <price>2.3</price>
+            <amount>750.0</amount>
+        </item>
+        <item>
+            <name>3bit</name>
+            <price>0.7</price>
+            <amount>2</amount>
+        </item>
+        <item>
+            <name>Ananas</name>
+            <price>2.4</price>
+            <amount>1.0</amount>
+        </item>
+    </items>
+    <price>
+        <EUR>1733.0</EUR>
+        <USD>1947.0255</USD>
+    </price>
+</bill>

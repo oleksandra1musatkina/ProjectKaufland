@@ -1,9 +1,9 @@
 package sk.itsovy.projectKaufland.items.goods;
 
 import sk.itsovy.projectKaufland.items.Item;
-import sk.itsovy.projectKaufland.items.Piece;
+import sk.itsovy.projectKaufland.items.PiecesInterface;
 
-public class Goods extends Item implements Piece {
+public class Goods extends Item implements PiecesInterface {
     private int amount;
     private Category type;
 
@@ -32,6 +32,6 @@ public class Goods extends Item implements Piece {
 
     @Override
     public double getTotalPrice() {
-        return volume*getPrice();
+        return amount * getPrice();
     }
 }

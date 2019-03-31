@@ -10,12 +10,10 @@ public abstract class Item implements ItemInterface {
         this.price = price;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public double getPrice() {
         return price;
     }
