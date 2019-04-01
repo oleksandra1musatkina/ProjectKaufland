@@ -34,7 +34,9 @@ public class Application {
         bill.addItem(ananas);
         Goods mydlo = new Goods("Mydlo", 1.2, 3, Category.HYGIENE);
         bill.addItem(mydlo);
-        bill.removeItem(mydlo);
+        Goods mydlo2 = new Goods("mydlo", 2.2, 1, Category.HYGIENE);
+        bill.addItem(mydlo2);
+//        bill.removeItem(mydlo);
         bill.print();
         XmlGenerator xmlGenerator = new XmlGenerator();
         xmlGenerator.generateXml(bill);

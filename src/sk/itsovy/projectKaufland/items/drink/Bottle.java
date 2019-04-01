@@ -25,6 +25,11 @@ public class Bottle extends Drink implements PiecesInterface {
     }
 
     @Override
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    @Override
     public double getTotalPrice() {
         return amount * getPrice();
     }

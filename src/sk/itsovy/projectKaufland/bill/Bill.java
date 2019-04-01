@@ -52,8 +52,20 @@ public class Bill {
                 String message = "Bill is full, maximum is " + Globals.MAXITEMS + " items";
                 throw new BillException(message);
             }
-            items.add(item);
-            count++;
+            boolean contains = false;
+            for (Item oldItem : items) {
+                if (oldItem.getName().compareToIgnoreCase(oldItem.getName()) == 0 &&
+                        (item.getClass().isInstance(oldItem))
+                ) {
+                    System.out.println("rovnake");
+                    contains = true;
+                    update(oldItem, item);
+                }
+            }
+            if (!contains) {
+                items.add(item);
+                count++;
+            }
         }
     }
 
@@ -104,4 +116,15 @@ public class Bill {
             }
         }
     }
+
+    public void update(Item item1, Item item2) {
+        if (item1 instanceof DraftInterface) {
+            ((DraftInterface) item1).setVolume(((DraftInterface) item1).getVolume() + ((DraftInterface) item2).getVolume());
+        } else if (item1 instanceof Fruit) {
+            ((Fruit) item1).setWeight(((Fruit) item1).getWeight() + ((Fruit) item2).getWeight());
+        } else if (item1 instanceof PiecesInterface) {
+            ((PiecesInterface) item1).setAmount(((PiecesInterface) item1).getAmount() + ((PiecesInterface) item2).getAmount());
+        }
+    }
+
 }
