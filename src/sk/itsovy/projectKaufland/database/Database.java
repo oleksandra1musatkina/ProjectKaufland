@@ -98,4 +98,36 @@ public class Database {
         }
 
     }
+
+    public int getTodayBillsCount() throws SQLException {
+        Connection connection = getConnection();
+        PreparedStatement sqlPreparedStatement = null;
+        PreparedStatement secondSqlStatement = null;
+        int count = 0;
+        try {
+            connection.setAutoCommit(false);
+
+            sqlPreparedStatement = connection.prepareStatement("SELECT COUNT(*) from Bill WHERE DATE(Date) = CURRENT_DATE()");
+
+            sqlPreparedStatement.execute();
+            ResultSet rs = sqlPreparedStatement.getResultSet();
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connection.rollback();
+        } finally {
+            if (sqlPreparedStatement != null) {
+                sqlPreparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        return count;
+
+    }
 }

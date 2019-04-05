@@ -36,6 +36,9 @@ public class XmlGenerator {
         Element datum1 = doc.createElement("dateOfPurchase");
         datum1.appendChild(doc.createTextNode(String.valueOf(bill.getDatetime())));
         datum.appendChild(datum1);
+        Element number = doc.createElement("number");
+        rootElement.appendChild(number);
+        number.appendChild(doc.createTextNode(String.valueOf(bill.getTodayBillNumber())));
 
         Element items = doc.createElement("items");
         rootElement.appendChild(items);

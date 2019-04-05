@@ -20,12 +20,18 @@ public class Bill {
     private int count;
     private boolean open;
     private Date datetime = new Date();
+    private int todayBillNumber;
 
 
     public Bill() {
         items = new ArrayList<>();
         open = true;
         count = 0;
+        todayBillNumber = 0;
+    }
+
+    public int getTodayBillNumber() {
+        return todayBillNumber;
     }
 
     public Date getDatetime() {
@@ -37,6 +43,7 @@ public class Bill {
 //            System.out.println(datum + " " + time);
             System.out.println("dt: " + datetime);
             Database database = Database.getInstance();
+            todayBillNumber = database.getTodayBillsCount() + 1;
             database.insertNewBill(this);
         }
         open = false;
@@ -44,18 +51,13 @@ public class Bill {
 
     public void addItem(Item item) throws BillException {
         if (item != null) {
-            if (open == false) {
-                String message = "Bill is closed. Is not allowed to add any items!";
-                throw new BillException(message);
-            }
-            if (count == Globals.MAXITEMS) {
-                String message = "Bill is full, maximum is " + Globals.MAXITEMS + " items";
-                throw new BillException(message);
-            }
+
             boolean contains = false;
             for (Item oldItem : items) {
+
                 if (oldItem.getName().compareToIgnoreCase(oldItem.getName()) == 0 &&
-                        (item.getClass().isInstance(oldItem))
+                        item.getClass().isInstance(oldItem) &&
+                        item.getPrice() == oldItem.getPrice()
                 ) {
                     System.out.println("rovnake");
                     contains = true;
@@ -63,6 +65,15 @@ public class Bill {
                 }
             }
             if (!contains) {
+
+                if (open == false) {
+                    String message = "Bill is closed. Is not allowed to add any items!";
+                    throw new BillException(message);
+                }
+                if (count == Globals.MAXITEMS) {
+                    String message = "Bill is full, maximum is " + Globals.MAXITEMS + " items";
+                    throw new BillException(message);
+                }
                 items.add(item);
                 count++;
             }

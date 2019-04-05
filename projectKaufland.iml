@@ -9,5 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mysql-connector-java-8.0.15" level="project" />
     <orderEntry type="library" name="gson-2.6.2" level="project" />
+    <orderEntry type="library" name="mongodb-driver-3.10.1" level="project" />
+    <orderEntry type="library" name="mongodb-driver-core-3.10.1" level="project" />
+    <orderEntry type="library" name="bson-3.10.1" level="project" />
   </component>
 </module>

@@ -1,6 +1,7 @@
 package sk.itsovy.projectKaufland.main;
 
 import sk.itsovy.projectKaufland.bill.Bill;
+import sk.itsovy.projectKaufland.database.MongoDb;
 import sk.itsovy.projectKaufland.exception.BillException;
 import sk.itsovy.projectKaufland.items.drink.Bottle;
 import sk.itsovy.projectKaufland.items.drink.Draft;
@@ -36,11 +37,15 @@ public class Application {
         bill.addItem(mydlo);
         Goods mydlo2 = new Goods("mydlo", 2.2, 1, Category.HYGIENE);
         bill.addItem(mydlo2);
+        Goods mydlo3 = new Goods("mydlO", 2.2, 2, Category.HYGIENE);
+        bill.addItem(mydlo3);
 //        bill.removeItem(mydlo);
         bill.print();
+        bill.end();
+        MongoDb mongoDb = new MongoDb();
+        mongoDb.insertNewBill(bill);
         XmlGenerator xmlGenerator = new XmlGenerator();
         xmlGenerator.generateXml(bill);
-        bill.end();
 //        System.out.println("total price: " + bill.getFinalPrice());
     }
 }
